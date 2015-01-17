@@ -60,21 +60,17 @@ bool WavAnalyzer::loadFile()
 
     m_sampleRate = format.sampleRate();
 
-    // check form expected format
-    if (format.sampleSize() == 16 &&
-        format.sampleType() == QAudioFormat::SignedInt &&
-        format.byteOrder() == QAudioFormat::LittleEndian)
-    {
-        QDataStream stream(&file);
-        stream.setByteOrder(QDataStream::LittleEndian);
 
-        while (! stream.atEnd())
-        {
-            short val = 0;
-            stream >> val;
-            m_sampledData << (double)(val / pow(2.0, 15));
-        }
+    QDataStream stream(&file);
+    stream.setByteOrder(QDataStream::LittleEndian);
+
+    while (! stream.atEnd())
+    {
+        short val = 0;
+        stream >> val;
+        m_sampledData << (double)(val / pow(2.0, 15));
     }
+
 
     qDebug() << "sampled data length:" << m_sampledData.length();
 
@@ -97,10 +93,13 @@ void WavAnalyzer::analyzeSampledData()
     {
         y = vector::subrange(m_sampledData, pos, pos + ms30 - 1);
         y = vector::subtract(y, vector::avg(y));
-        energy << 10 * log10(vector::dot(y, y));
+        energy << vector::sum(vector::abs(y));
         ethr = 0.1 * energy.last();
 
-        r = vector::xcorr(y, y, true);
+//        qDebug() << y << endl;
+
+//        r = vector::xcorr(y, y, true);
+        r=y;
         //r = vector::xcorr(y, ms20, true);
         r = vector::subrange(r, ms20 + 1, 2 * ms20 + 1);
 
@@ -118,19 +117,26 @@ void WavAnalyzer::analyzeSampledData()
 
         pos += ms10;
     }
-
+    m_femaleEnergy = 0;
+    m_maleEnergy = 0;
     QVector<double> gx;
     for (int i = 0; i < fx.count(); i++)
     {
-        if (fx.at(i) > 75 && fx.at(i) < 275)
+        if (fx.at(i) > 85 && fx.at(i) < 255)
         {
             gx << fx.at(i);
+            if(fx.at(i) < 165){
+                m_maleEnergy += energy.at(i);
+            }
+            else if(fx.at(i) > 180 ){
+
+                m_femaleEnergy += energy.at(i);
+            }
         }
     }
 
     m_median = vector::median(gx);
     m_std = vector::std(gx);
-
     qDebug() << "median:" << m_median;
     qDebug() << "std:" << m_std;
 }

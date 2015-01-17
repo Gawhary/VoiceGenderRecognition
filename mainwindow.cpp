@@ -12,10 +12,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     m_analyzer = new WavAnalyzer(this);
-
-    connect(ui->actionAnalyze, SIGNAL(triggered()), this, SLOT(analyzeFile()));
-    connect(ui->analyzeButton, SIGNAL(clicked()), this, SLOT(analyzeFile()));
-    connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(openFile()));
     connect(ui->openButton, SIGNAL(clicked()), this, SLOT(openFile()));
 }
 
@@ -26,22 +22,27 @@ MainWindow::~MainWindow()
 
 void MainWindow::openFile()
 {
-    QString fileName = QFileDialog::getOpenFileName(
+    QStringList fileNames = QFileDialog::getOpenFileNames(
                 this, QString("Select sound files"), QString(), QString("WAV-files (*.wav);;All Files (*.*)"));
 
-    ui->fileNameEdit->setText(fileName);
+    foreach (QString f, fileNames) {
+        analyzeFile(f);
+    }
+
 }
 
-void MainWindow::analyzeFile()
+void MainWindow::analyzeFile(QString fileName)
 {
-    QString fileName = ui->fileNameEdit->text();
-    QString results = "";
+    QString results;
 
     if (m_analyzer->analyzeFile(fileName))
     {
+        results += fileName + "\n";
         results += QString("sampled data length:%1\n").arg(m_analyzer->sampledData().count());
         results += QString("sampled rate:%1\n").arg(m_analyzer->sampleRate());
         results += QString("median:%1\n").arg(m_analyzer->median());
+        results += QString("Male Energy:%1\n").arg(m_analyzer->mEnergy());
+        results += QString("Feale Energy:%1\n").arg(m_analyzer->fEnergy());
         results += QString("std:%1").arg(m_analyzer->std());
     }
     else
@@ -49,5 +50,5 @@ void MainWindow::analyzeFile()
         results = "error:" + m_analyzer->errorMsg();
     }
 
-    ui->resultEdit->setPlainText(results);
+    ui->resultEdit->appendPlainText(results);
 }

@@ -19,7 +19,7 @@ public:
 
 private slots:
     void openFile();
-    void analyzeFile();
+    void analyzeFile(QString fileName);
 
 private:
     Ui::MainWindow *ui;

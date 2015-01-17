@@ -16,20 +16,6 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QLabel" name="fileNameLabel">
-      <property name="text">
-       <string>File Name:</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLineEdit" name="fileNameEdit">
-      <property name="text">
-       <string>/home/mabdelaal86/Downloads/test.wav</string>
-      </property>
-     </widget>
-    </item>
-    <item>
      <widget class="QLabel" name="resultLabel">
       <property name="text">
        <string>Result:</string>
@@ -61,34 +47,9 @@
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QPushButton" name="analyzeButton">
-        <property name="text">
-         <string>Analyze</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </item>
    </layout>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>400</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
-    </property>
-    <addaction name="actionOpen"/>
-    <addaction name="actionAnalyze"/>
-   </widget>
-   <addaction name="menuFile"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">

@@ -120,9 +120,9 @@ bool isPCM(const QAudioFormat &format)
 bool isPCMS16LE(const QAudioFormat &format)
 {
     return isPCM(format) &&
-           format.sampleType() == QAudioFormat::SignedInt &&
-           format.sampleSize() == 16 &&
-           format.byteOrder() == QAudioFormat::LittleEndian;
+           format.sampleType()  == QAudioFormat::SignedInt &&
+           format.sampleSize()  == 16 &&
+           format.byteOrder()   == QAudioFormat::LittleEndian;
 }
 
 const qint16  PCMS16MaxValue     =  32767;

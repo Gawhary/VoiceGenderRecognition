@@ -18,6 +18,8 @@ public:
     double sampleRate() const { return m_sampleRate; }
     double median() const { return m_median; }
     double std() const { return m_std; }
+    double fEnergy() const {return m_femaleEnergy;}
+    double mEnergy() const {return m_maleEnergy;}
 
     bool analyzeFile(const QString &fileName);
     void analyzeData(const QVector<double> &sampledData, int sampleRate);
@@ -33,6 +35,8 @@ private:
     int m_sampleRate;
     double m_median;
     double m_std;
+    double m_maleEnergy;
+    double m_femaleEnergy;
 };
 
 #endif // WAVANALYZER_H
